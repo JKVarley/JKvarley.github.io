@@ -4,13 +4,21 @@
 const FRAME_COUNT = 8;
 const SOUND_COUNT = 6;
 let soundIndex = 0;
+let danceFrames = [];
+let clubFrames = [];
+let countryFrames = [];
 
+let jazzSounds = [];
+let clubSounds = [];
+let countrySounds = [];
+
+let sounds = [];
+let index = 0;
 
 // one array holds all eight poses
 let frames = [];
-let sounds = [];
+
 // which frame the click-controlled dancer shows
-let index = 0;
 
 // parallel arrays, one entry per animated dancer
 let xs = [200, 360, 520];
@@ -25,20 +33,44 @@ async function setup() {
   textFont("monospace");
   textSize(14);
 
-  // load all eight poses with a loop and string concatenation
   for (let i = 0; i < FRAME_COUNT; i++) {
     const frameNumber = String(i + 1).padStart(2, "0");
-    frames.push(await loadImage("dance_frames/dance_frame_" + frameNumber + ".png"));
-  
-  
-  
+    danceFrames.push(
+      await loadImage("dance_frames/dance_frame_" + frameNumber + ".png"),
+    );
   }
-  
+
+  for (let i = 0; i < FRAME_COUNT; i++) {
+    const frameNumber = String(i + 1).padStart(2, "0");
+    clubFrames.push(
+      await loadImage("club_frames/club_frames_" + frameNumber + ".png"),
+    );
+  }
+
+  for (let i = 0; i < FRAME_COUNT; i++) {
+    const frameNumber = String(i + 1).padStart(2, "0");
+    countryFrames.push(
+      await loadImage("country_frames/country_frame_" + frameNumber + ".png"),
+    );
+  }
+
   for (let i = 0; i < SOUND_COUNT; i++) {
-    sounds.push(await loadSound("JazzSounds/sound" + i + ".mp3"));
+    jazzSounds.push(await loadSound("JazzSounds/sound" + i + ".mp3"));
+  }
+
+  for (let i = 0; i < SOUND_COUNT; i++) {
+    clubSounds.push(await loadSound("ClubSounds/ClubSounds" + i + ".mp3"));
+  }
+
+  for (let i = 0; i < SOUND_COUNT; i++) {
+    countrySounds.push(
+      await loadSound("CountrySounds/CountrySounds" + i + ".mp3"),
+    );
   }
 }
 
+frames = danceFrames;
+sounds = jazzSounds;
 
 function draw() {
   background(240);
@@ -63,9 +95,28 @@ function draw() {
 // advance the index, wrapping at the end
 function mousePressed() {
   index = (index + 1) % frames.length;
-  
+
   userStartAudio(); // browsers block sound until the user clicks; this switches it on
   sounds[soundIndex].play();
   soundIndex = (soundIndex + 1) % sounds.length;
+}
 
+function keyPressed() {
+  if (key === "1") {
+    frames = danceFrames;
+    sounds = jazzSounds;
   }
+
+  if (key === "2") {
+    frames = clubFrames;
+    sounds = clubSounds;
+  }
+
+  if (key === "3") {
+    frames = countryFrames;
+    sounds = countrySounds;
+  }
+
+  index = 0;
+  soundIndex = 0;
+}
