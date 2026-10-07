@@ -4,11 +4,13 @@
    =========================================================== */
 
 :root {
-  --ink: #16161a;          /* main text color */
-  --muted: #6b6b76;        /* quieter text */
-  --accent: #2f4fd8;       /* links and highlights */
-  --paper: #fdfdfb;        /* page background */
-  --line: #e4e4e0;         /* borders */
+  color-scheme: dark;
+  --ink: #f3e8a5;          /* main text color */
+  --muted: #b2a66b;        /* quieter text */
+  --accent: #ffd633;       /* links and highlights */
+  --paper: #090908;        /* page background */
+  --line: #393316;         /* borders */
+  --surface: #121109;
 }
 
 * { box-sizing: border-box; }
@@ -16,7 +18,7 @@
 body {
   margin: 0;
   padding: 0 1.25rem 5rem;
-  background: var(--paper);
+  background: linear-gradient(180deg, #171506 0, var(--paper) 28rem);
   color: var(--ink);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 18px;
@@ -45,7 +47,7 @@ header .site-name {
   font-size: 1.15rem;
   font-weight: 700;
   text-decoration: none;
-  color: var(--ink);
+  color: var(--accent);
   margin-right: auto;
 }
 
@@ -57,17 +59,25 @@ header nav a {
 
 header nav a:hover { color: var(--accent); }
 
+header nav a:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
 /* --- text --------------------------------------------------- */
 
 h1 {
   font-size: 2.1rem;
   line-height: 1.2;
   margin: 0 0 0.5rem;
+  color: var(--ink);
 }
 
 h2 {
   font-size: 1.3rem;
   margin: 2.5rem 0 0.75rem;
+  color: var(--accent);
 }
 
 .tagline {
@@ -88,12 +98,17 @@ a { color: var(--accent); }
 
 .card-list li {
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 6px;
+  background: rgb(255 214 51 / 2%);
   margin-bottom: 0.9rem;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
 }
 
-.card-list li:hover { border-color: var(--accent); }
+.card-list li:hover {
+  border-color: var(--accent);
+  background: rgb(255 214 51 / 5%);
+  transform: translateY(-1px);
+}
 
 .card-list a {
   display: block;
