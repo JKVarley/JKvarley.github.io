@@ -84,7 +84,7 @@ function draw() {
   image(frames[index], 20, 140, 160, 200);
   fill(0);
   text("click: frames[" + index + "]", 20, 370);
-
+text("Click to dance and play music, or press #1,2,3 to change eras", 20, 380);
   // one loop draws every dancer, each at its own x and speed
   for (let i = 0; i < xs.length; i++) {
     let pose = floor(frameCount / speeds[i]) % frames.length;
