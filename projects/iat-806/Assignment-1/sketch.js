@@ -17,7 +17,7 @@ async function setup() {
   createCanvas(800, 420);
   colWidth = width / numCols;
   rowHeight = height / numRows;
-  for (let i = 0; i < numFrames; i++) {
+  for (let i = 0; i < numCols; i++) {
     // let fileName = `dance_frames/dance${i}.png`;
     let fileName = "dance_frames/dance" + i + ".png";
 
@@ -34,7 +34,7 @@ function draw() {
 
   for (let i = 0; i < numFrames; i++) {
     for (let j = 0; j < numRows; j++) {
-      rect(i * rowHeight, j * rowHeight, colWidth, rowHeight);
+      rect(i * colWidth, j * rowHeight, colWidth, rowHeight);
     }
   }
 
