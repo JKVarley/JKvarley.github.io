@@ -40,14 +40,29 @@ async function setup() {
 function draw() {
   background(120);
   if (mouseX < width) {
-    numCols = Math.floor(map(mouseX, 0, width, 2, 20));
-    // dist the mouse position and the position of the dancing profs
-    // in the grid, and then use that number to map to the speed.
+    let speed = map(mouseX, 0, width, 2, 20);
+
+    for (let i = 0; i < numCols; i++) {
+      for (let j = 0; j < numRows; j++) {
+        speeds[i][j] = speed;
+      }
+    }
+
     colWidth = width / numCols;
   }
 
   for (let i = 0; i < numCols; i++) {
     for (let j = 0; j < numRows; j++) {
+      let cellX = i * colWidth;
+      let cellY = j * rowHeight;
+      let distance = dist(cellX, cellY, mouseX, mouseY);
+      if (distance < 100) {
+        speeds[i][j] = 2;
+      } else if (distance < 200) {
+        speeds[i][j] = 7;
+      } else {
+        speeds[i][j] = 30;
+      }
       fill(colors[i][j][0], colors[i][j][1], colors[i][j][2], 120);
       rect(i * colWidth, j * rowHeight, colWidth, rowHeight);
       animate(frames, speeds[i][j], i * colWidth, j * rowHeight, colWidth);
