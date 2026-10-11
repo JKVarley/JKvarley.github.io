@@ -89,6 +89,14 @@ function draw() {
       );
     }
   }
+
+  fill(255);
+  noStroke();
+  rect(10, 10, 350, 32);
+  fill(0);
+  textSize(14);
+  textAlign(LEFT, CENTER);
+  text("Push numbers 1, 2, or 3 for a different vibe", 18, 26);
 }
 
 function keyPressed() {
