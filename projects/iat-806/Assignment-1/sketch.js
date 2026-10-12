@@ -5,17 +5,16 @@
 // - Enter moves the ball to a random location that is not touching the pit.
 console.log("IAT 806 — W2: variables, draw loop, conditionals, random");
 let ballX = 80;
-let ballY = 66;
+let ballY = 410;
 let ballsize = 20;
 let pitX = 50;
-let pitY = 50;
+let pitY = -10;
 let pitSize = 20;
 let targetImage = null;
 let campusImage = null;
 let targetX = 20;
 let targetY = 20;
 let targetSize = 40;
-let speedX = 1;
 let speedY = 1;
 let ballVelocityX = 0;
 let ballVelocityY = 0;
@@ -26,16 +25,17 @@ let hit = false;
 
 function setup() {
   createCanvas(800, 800);
+  ballY = height / 2 + ballsize / 2;
+  targetY = random(height / 2, height - targetSize);
   loadImage("proffhead.jpg", (loadedImage) => {
     targetImage = loadedImage;
   });
   loadImage("surreycampus.jpg", (loadedImage) => {
     campusImage = loadedImage;
   });
-  let rPit = pitSize / 2;
-
-  pitX = random(rPit, width - rPit);
-  pitY = random(rPit, height - rPit);
+  pitSize = 20 + level * 30;
+  pitX = random(pitSize / 2, width - pitSize / 2);
+  pitY = -pitSize / 2;
 }
 
 function draw() {
@@ -69,10 +69,9 @@ function draw() {
     background(1);
   }
 
+  pitSize = 20 + level * 30;
   let rBall = ballsize / 2;
   let rPit = pitSize / 2;
-
-  pitSize = 20 + level * 30;
 
   if (!paused) {
     // Move the ball using the velocity created when the mouse is released.
@@ -104,25 +103,26 @@ function draw() {
       ballVelocityY *= -1;
     }
 
-    // Move the pit.
-    pitX += speedX;
-    pitY += speedY;
-
-    //wall bouce
-    if (pitX > width - rPit || pitX < rPit) {
-      speedX *= -1;
+    if (ballY < height / 2 + rBall) {
+      ballY = height / 2 + rBall;
+      ballVelocityY *= -1;
     }
 
-    if (pitY > height - rPit || pitY < rPit) {
-      speedY *= -1;
+    // Move the rectangle down the canvas and restart it at the top.
+    pitY += speedY;
+    if (pitY - rPit > height) {
+      pitX = random(rPit, width - rPit);
+      pitY = -rPit;
     }
   }
 
-  // check the distance between ball and pit.
-  let distanceBetween = dist(ballX, ballY, pitX, pitY);
+  // Check the distance between the ball and the falling rectangle.
+  let closestPitX = constrain(ballX, pitX - rPit, pitX + rPit);
+  let closestPitY = constrain(ballY, pitY - rPit, pitY + rPit);
+  let distanceBetween = dist(ballX, ballY, closestPitX, closestPitY);
 
   // If ball and pit overlap, reset the level to 1.
-  if (distanceBetween < rBall + rPit) {
+  if (distanceBetween < rBall) {
     // Only trigger once.
     if (collision === false) {
       level = 1;
@@ -138,9 +138,36 @@ function draw() {
   fill(255);
   circle(ballX, ballY, ballsize);
 
-  // Draw the moving pit.
-  fill(255, 0, 0);
-  circle(pitX, pitY, pitSize);
+  // Draw the picture on the falling rectangle.
+  if (targetImage) {
+    let sourceX = 0;
+    let sourceY = 0;
+    let sourceWidth = targetImage.width;
+    let sourceHeight = targetImage.height;
+
+    if (sourceWidth > sourceHeight) {
+      sourceX = (sourceWidth - sourceHeight) / 2;
+      sourceWidth = sourceHeight;
+    } else {
+      sourceY = (sourceHeight - sourceWidth) / 2;
+      sourceHeight = sourceWidth;
+    }
+
+    image(
+      targetImage,
+      pitX - rPit,
+      pitY - rPit,
+      pitSize,
+      pitSize,
+      sourceX,
+      sourceY,
+      sourceWidth,
+      sourceHeight,
+    );
+  } else {
+    fill(255, 0, 0);
+    rect(pitX - rPit, pitY - rPit, pitSize, pitSize);
+  }
 
   //draw pause text
   if (paused) {
@@ -163,7 +190,7 @@ function draw() {
 
       // Move the target
       targetX = random(0, width - targetSize);
-      targetY = random(0, height - targetSize);
+      targetY = random(height / 2, height - targetSize);
 
       hit = true;
     }
@@ -206,6 +233,11 @@ function draw() {
   fill(255);
   textSize(60);
   text("Level: " + level, 500, 50);
+
+  stroke(255);
+  strokeWeight(2);
+  line(0, height / 2, width, height / 2);
+  noStroke();
 }
 
 function mouseReleased() {
