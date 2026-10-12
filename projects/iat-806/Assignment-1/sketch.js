@@ -1,41 +1,51 @@
-// IAT 806 — W2: variables, draw loop, conditionals, random
-// Controls:
+// IAT 806 — ASsignment 1 starter: avoid your friends! Run with Live Server.
 // - Hold and release the left mouse button to launch the ball away from the mouse.
 // - Spacebar pauses/unpauses the game.
 // - Enter moves the ball to a random location that is not touching the pit.
-console.log("IAT 806 — W2: variables, draw loop, conditionals, random");
+console.log("Assignment 1: Avoid your friends!");
 let ballX = 80;
 let ballY = 410;
 let ballsize = 20;
-let pitX = 50;
-let pitY = -10;
+let pitX = [];
+let pitY = [];
 let pitSize = 20;
-let targetImage = null;
+let pitFrame = [];
+let siatFrames = [];
 let campusImage = null;
-let targetX = 20;
-let targetY = 20;
-let targetSize = 40;
 let speedY = 1;
+let numPits = 5;
 let ballVelocityX = 0;
 let ballVelocityY = 0;
 let paused = false;
 let collision = false;
 let level = 1;
-let hit = false;
+let levelTimer = 0;
 
 function setup() {
   createCanvas(800, 800);
   ballY = height / 2 + ballsize / 2;
-  targetY = random(height / 2, height - targetSize);
-  loadImage("proffhead.jpg", (loadedImage) => {
-    targetImage = loadedImage;
-  });
-  loadImage("surreycampus.jpg", (loadedImage) => {
+  for (let i = 0; i < 8; i++) {
+    let fileName = "siat_frames/photo" + i + ".png";
+    if (i === 7) {
+      fileName = "siat_frames/photo7.jpg";
+    }
+    loadImage(fileName, (loadedImage) => {
+      siatFrames[i] = loadedImage;
+    });
+  }
+  loadImage("Campus.jpeg", (loadedImage) => {
     campusImage = loadedImage;
   });
+
+  // this makes the boxes bigger as the level goes up
   pitSize = 20 + level * 30;
-  pitX = random(pitSize / 2, width - pitSize / 2);
-  pitY = -pitSize / 2;
+  for (let i = 0; i < numPits; i++) {
+    pitX[i] = random(pitSize / 2, width - pitSize / 2);
+    pitY[i] = random(-height, 0);
+
+    //adds a random photo to the pits
+    pitFrame[i] = floor(random(0, 8));
+  }
 }
 
 function draw() {
@@ -45,7 +55,7 @@ function draw() {
     let sourceWidth = campusImage.width;
     let sourceHeight = campusImage.height;
     let canvasRatio = width / height;
-
+    // this makes the background image the same size as the canvas and fits it to the canvas with stretching.
     if (sourceWidth / sourceHeight > canvasRatio) {
       sourceWidth = sourceHeight * canvasRatio;
       sourceX = (campusImage.width - sourceWidth) / 2;
@@ -69,11 +79,18 @@ function draw() {
     background(1);
   }
 
+  // this sets the radius and size of the ball so we can bounce it off the edges.
   pitSize = 20 + level * 30;
   let rBall = ballsize / 2;
   let rPit = pitSize / 2;
 
   if (!paused) {
+    levelTimer++;
+    if (levelTimer >= 300) {
+      level++;
+      levelTimer = 0;
+    }
+
     // Move the ball using the velocity created when the mouse is released.
     ballX += ballVelocityX;
     ballY += ballVelocityY;
@@ -109,20 +126,30 @@ function draw() {
     }
 
     // Move the rectangle down the canvas and restart it at the top.
-    pitY += speedY;
-    if (pitY - rPit > height) {
-      pitX = random(rPit, width - rPit);
-      pitY = -rPit;
+    for (let i = 0; i < numPits; i++) {
+      pitY[i] += speedY;
+      if (pitY[i] - rPit > height) {
+        // this makes the boxes start at a random X position at the top of the canvas.
+        pitX[i] = random(rPit, width - rPit);
+        pitY[i] = -rPit;
+        pitFrame[i] = floor(random(0, 8));
+      }
     }
   }
 
-  // Check the distance between the ball and the falling rectangle.
-  let closestPitX = constrain(ballX, pitX - rPit, pitX + rPit);
-  let closestPitY = constrain(ballY, pitY - rPit, pitY + rPit);
-  let distanceBetween = dist(ballX, ballY, closestPitX, closestPitY);
+  let pitCollision = false;
+  for (let i = 0; i < numPits; i++) {
+    // Check the distance between the ball and each falling rectangle.
+    let closestPitX = constrain(ballX, pitX[i] - rPit, pitX[i] + rPit);
+    let closestPitY = constrain(ballY, pitY[i] - rPit, pitY[i] + rPit);
+    let distanceBetween = dist(ballX, ballY, closestPitX, closestPitY);
+    if (distanceBetween < rBall) {
+      pitCollision = true;
+    }
+  }
 
   // If ball and pit overlap, reset the level to 1.
-  if (distanceBetween < rBall) {
+  if (pitCollision) {
     // Only trigger once.
     if (collision === false) {
       level = 1;
@@ -138,35 +165,37 @@ function draw() {
   fill(255);
   circle(ballX, ballY, ballsize);
 
-  // Draw the picture on the falling rectangle.
-  if (targetImage) {
-    let sourceX = 0;
-    let sourceY = 0;
-    let sourceWidth = targetImage.width;
-    let sourceHeight = targetImage.height;
+  // This draws each rectangle's picture.
+  for (let i = 0; i < numPits; i++) {
+    if (siatFrames[pitFrame[i]]) {
+      let sourceX = 0;
+      let sourceY = 0;
+      let sourceWidth = siatFrames[pitFrame[i]].width;
+      let sourceHeight = siatFrames[pitFrame[i]].height;
 
-    if (sourceWidth > sourceHeight) {
-      sourceX = (sourceWidth - sourceHeight) / 2;
-      sourceWidth = sourceHeight;
+      if (sourceWidth > sourceHeight) {
+        sourceX = (sourceWidth - sourceHeight) / 2;
+        sourceWidth = sourceHeight;
+      } else {
+        sourceY = (sourceHeight - sourceWidth) / 2;
+        sourceHeight = sourceWidth;
+      }
+
+      image(
+        siatFrames[pitFrame[i]],
+        pitX[i] - rPit,
+        pitY[i] - rPit,
+        pitSize,
+        pitSize,
+        sourceX,
+        sourceY,
+        sourceWidth,
+        sourceHeight,
+      );
     } else {
-      sourceY = (sourceHeight - sourceWidth) / 2;
-      sourceHeight = sourceWidth;
+      fill(255, 0, 0);
+      rect(pitX[i] - rPit, pitY[i] - rPit, pitSize, pitSize);
     }
-
-    image(
-      targetImage,
-      pitX - rPit,
-      pitY - rPit,
-      pitSize,
-      pitSize,
-      sourceX,
-      sourceY,
-      sourceWidth,
-      sourceHeight,
-    );
-  } else {
-    fill(255, 0, 0);
-    rect(pitX - rPit, pitY - rPit, pitSize, pitSize);
   }
 
   //draw pause text
@@ -176,63 +205,14 @@ function draw() {
     text("PAUSED", width / 2 - 60, height / 2);
   }
 
-  // Find the point on the target square closest to the ball's centre.
-  let closestX = constrain(ballX, targetX, targetX + targetSize);
-  let closestY = constrain(ballY, targetY, targetY + targetSize);
-
-  // Find the distance from the ball centre to that closest point.
-  let distanceToTarget = dist(ballX, ballY, closestX, closestY);
-
-  // ball collides with target
-  if (distanceToTarget < rBall) {
-    if (hit === false) {
-      level++;
-
-      // Move the target
-      targetX = random(0, width - targetSize);
-      targetY = random(height / 2, height - targetSize);
-
-      hit = true;
-    }
-  } else {
-    hit = false;
-  }
-
-  // Draw the target square.
-  if (targetImage) {
-    let sourceX = 0;
-    let sourceY = 0;
-    let sourceWidth = targetImage.width;
-    let sourceHeight = targetImage.height;
-
-    if (sourceWidth > sourceHeight) {
-      sourceX = (sourceWidth - sourceHeight) / 2;
-      sourceWidth = sourceHeight;
-    } else {
-      sourceY = (sourceHeight - sourceWidth) / 2;
-      sourceHeight = sourceWidth;
-    }
-
-    image(
-      targetImage,
-      targetX - targetSize / 2,
-      targetY - targetSize / 2,
-      targetSize * 2,
-      targetSize * 2,
-      sourceX,
-      sourceY,
-      sourceWidth,
-      sourceHeight,
-    );
-  } else {
-    fill(255, 34, 90);
-    rect(targetX, targetY, targetSize, targetSize);
-  }
-
   // Draw the level .
   fill(255);
   textSize(60);
   text("Level: " + level, 500, 50);
+
+  fill(255);
+  textSize(20);
+  text("avoid hitting your classmates for as long as possible", 10, 30);
 
   stroke(255);
   strokeWeight(2);
