@@ -180,7 +180,7 @@ function draw() {
         sourceY = (sourceHeight - sourceWidth) / 2;
         sourceHeight = sourceWidth;
       }
-
+      // this sets all the parameters for the images to be drawn in the right spot, at the right size, etc.
       image(
         siatFrames[pitFrame[i]],
         pitX[i] - rPit,
@@ -207,11 +207,11 @@ function draw() {
 
   // Draw the level .
   fill(255);
-  textSize(60);
-  text("Level: " + level, 500, 50);
+  textSize(40);
+  text("Level: " + level, 500, 100);
 
   fill(255);
-  textSize(20);
+  textSize(30);
   text("avoid hitting your classmates for as long as possible", 10, 30);
 
   stroke(255);
