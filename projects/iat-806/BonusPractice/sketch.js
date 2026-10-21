@@ -4,22 +4,28 @@ let numberOfBalls = 1000;
 
 function setup() {
   createCanvas(400, 400);
-
-  // this creates the balls in a loop
-  for (let i = 0; i < numberOfBalls; i++) {
-    let x = 300;
-    let y = 300;
-    let c = color(random(255), random(255), random(255));
-    let r = random(10, 50);
-    balls.push(new Ball(x, y, c, r));
-  }
 }
 function draw() {
   background(20);
 
-  for (let ball of balls) {
+  if (balls.length < numberOfBalls) {
+    let x = mouseX;
+    let y = mouseY;
+    let c = color(random(255), random(255), random(255));
+    let r = random(10, 50);
+    balls.push(new Ball(x, y, c, r));
+  }
+
+  for (let i = balls.length - 1; i >= 0; i--) {
+    let ball = balls[i];
     ball.move();
-    ball.show();
+    ball.fall();
+    ball.explode();
+    if (ball.r >= 100) {
+      balls.splice(i, 1);
+    } else {
+      ball.show();
+    }
   }
 }
 //we can create new balls here
@@ -30,15 +36,41 @@ class Ball {
     this.y = y;
     this.color = c;
     this.r = r;
+    this.ReachedBottom = false;
   }
 
   //methods - the things it can do
   move() {
     this.x += random(-5, 5);
-    this.y += random(-5, 5);
+    if (this.y + this.r < height) {
+      this.y += random(-5, 5);
+    }
+  }
+  fall() {
+    if (this.y + this.r < height) {
+      this.y += random(1, 10);
+    }
+  }
+
+  explode() {
+    if (this.y + this.r >= height) {
+      if (!this.ReachedBottom) {
+        this.fireColor();
+        this.ReachedBottom = true;
+      }
+      this.r += random(5, 20);
+      this.y = height - this.r;
+    }
+  }
+  fireColor() {
+    this.color = color(255, random(256), 0);
   }
   show() {
     fill(this.color);
-    rect(this.x, this.y, this.r);
+    if (this.ReachedBottom) {
+      circle(this.x, this.y + this.r / 2, this.r);
+    } else {
+      rect(this.x, this.y, this.r);
+    }
   }
 }
