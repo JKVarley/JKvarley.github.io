@@ -3,7 +3,7 @@ let balls = [];
 let numberOfBalls = 1000;
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(800, 800);
 }
 function draw() {
   background(20);
@@ -21,7 +21,7 @@ function draw() {
     ball.move();
     ball.fall();
     ball.explode();
-    if (ball.r >= 100) {
+    if (ball.r >= random(100, 200)) {
       balls.splice(i, 1);
     } else {
       ball.show();
