@@ -4,6 +4,8 @@ class Ball {
     this.x = x;
     this.y = y;
     this.color = c;
+    this.highlightColor = "red" 
+    this.originalColor = c
     // ALSO this is a diameter, not radius.
     // This is our mistake... we should have looked at the documentation.
     this.r = r;
@@ -16,15 +18,42 @@ class Ball {
     this.move(byHowMuch);
     this.show();
   }
+
+isOnBody(mask) {
+    let pixel = mask.get(floor(this.x), floor(this.y)); // [r,g,b,a];
+
+    return pixel[3] < 128;
+  }
+}
+
+  contains (externalX, externalY) {
+    let distance = dist(this.x, this.y, externalX, externalY);
+    if (distance < this.r) {
+      return true;
+    } else {
+    return false;
+  }
+}
+deHighlight() {
+    this.color = this.originalColor;
+  }
+highlight() {
+    this.color = this.highlightColor;
+  }
+
   move(byHowMuch) {
     // this.x = this.x + random(-5,5)
     this.x += random(-byHowMuch, byHowMuch);
     this.y += random(-byHowMuch, byHowMuch);
   }
 
+  respond(active) {if (active) {
+    this.highlight(); } else
+       {this.deHighlight();
+  }}
   changeSize(byHowMuch) {
     // we fix the size like this:
-    // the constrain is saying that it shouldn't grow larger than a certain amount.
+    // the constr0a0in is saying that it shouldn't grow larger than a certain amount.
     this.r = constrain(this.r + random(-byHowMuch, byHowMuch), 2, this.maxR);
   }
 
