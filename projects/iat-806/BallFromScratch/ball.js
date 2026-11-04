@@ -1,31 +1,21 @@
-
-let size = 200
-let x = mouseX
-let y = mouseY
-
 class ball {
-
-
   // The constructor method initializes the object
-  constructor(x, y, c, size) {
-    this.color = c;       // "this" refers to the new object being created
-    this.r = size;
-    x = mouseX
-    y = mouseY
-   
+  constructor(x, y, color, d) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.d = d;
   }
 
   show() {
-    fill(this.fillColor);
-    stroke(this.strokeColor);
-    circle(this.x, this.y, this.r * 2);
+    fill(this.color);
+    circle(this.x, this.y, this.d * 2);
+  }
+
+  jiggle() {
+    this.x += random(-5, 5);
+    if (this.y + this.d < height) {
+      this.y += random(-5, 5);
+    }
   }
 }
-update() {
-
- 
-}
-
-
-}
-

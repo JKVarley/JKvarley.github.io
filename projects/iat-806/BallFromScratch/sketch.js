@@ -1,21 +1,28 @@
 // An example sketch, so the page has something to show.
 // Delete all of this and write your own.
 
-function setup() {
-  const canvas = createCanvas(600, 400);
+let balls = [];
+let pucks;
 
-  // Puts the canvas inside the <div id="sketch-holder"> in index.html,
-  // instead of dropping it at the bottom of the page.
-  canvas.parent("sketch-holder");
+function setup() {
+  createCanvas(600, 400);
+
+  for (let i = 0; i < 300; i++) {
+    let x = mouseX;
+    let y = mouseY;
+    balls.push(new ball(x, y, color(255, 180, 60), 40));
+  }
 }
 
 function draw() {
   background(253, 253, 251);
 
-  noStroke();
-  fill(47, 79, 216);
-  circle(width / 2, height / 2, 160);
+  for (let ball of balls) {
+    ball.show();
+  }
 
-  fill(255, 180, 60);
-  circle(mouseX, mouseY, 40);
+  for (let i = balls.length - 1; i >= 0; i--) {
+    let ball = balls[i];
+    ball.jiggle();
+  }
 }

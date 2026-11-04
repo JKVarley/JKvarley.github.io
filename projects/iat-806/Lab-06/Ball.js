@@ -24,20 +24,21 @@ isOnBody(mask) {
 
     return pixel[3] < 128;
   }
-}
 
-  contains (externalX, externalY) {
+  contains(externalX, externalY) {
     let distance = dist(this.x, this.y, externalX, externalY);
     if (distance < this.r) {
       return true;
     } else {
-    return false;
+      return false;
+    }
   }
-}
-deHighlight() {
+
+  deHighlight() {
     this.color = this.originalColor;
   }
-highlight() {
+
+  highlight() {
     this.color = this.highlightColor;
   }
 
@@ -47,10 +48,13 @@ highlight() {
     this.y += random(-byHowMuch, byHowMuch);
   }
 
-  respond(active) {if (active) {
-    this.highlight(); } else
-       {this.deHighlight();
-  }}
+  respond(active) {
+    if (active) {
+      this.highlight();
+    } else {
+      this.deHighlight();
+    }
+  }
   changeSize(byHowMuch) {
     // we fix the size like this:
     // the constr0a0in is saying that it shouldn't grow larger than a certain amount.

@@ -64,14 +64,7 @@ function createRandomBall() {
   let ballY = random(0, height);
   let ballC = color(140, 0, 140 + random(-100, 100), 50);
   let ballR = 5;
-  let ball;
-  if (Math.random() < 0.9) {
-    ball = new Ball(ballX, ballY, ballC, ballR);
-  } else {
-    ball = new FlickerBall(ballX, ballY, ballC, ballR);
-  }
-
-  return ball;
+  return new Ball(ballX, ballY, ballC, ballR);
 }
 
 function gotResults(result) {
