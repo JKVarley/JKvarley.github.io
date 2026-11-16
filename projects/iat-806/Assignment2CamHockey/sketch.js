@@ -21,8 +21,12 @@ async function setup() {
   video.size(640, 480);
   video.hide();
 
+  let lemmingY = 10;
+  if (random(0, 1) < 0.5) {
+    lemmingY = height - 10;
+  }
   lemmings.push(
-    new Lemming(width / random(1.5, 2.5), height - 10, color(0, 0, 255), 20),
+    new Lemming(width / random(1.5, 2.5), lemmingY, color(0, 0, 255), 20),
   );
   goal = new Goal(width - 50, height / 2 - 25, 50, color(255, 255, 0));
   leftGoal = new Goal(0, height / 2 - 25, 50, color(255, 0, 0));
@@ -58,7 +62,13 @@ function draw() {
   }
 
   if (timeLeft > 0 && millis() - lastLemmingTime >= 3000) {
-    lemmings.push(new Lemming(width / 2, height - 10, color(0, 0, 255), 20));
+    let lemmingY = 10;
+    if (random(0, 1) < 0.5) {
+      lemmingY = height - 10;
+    }
+    lemmings.push(
+      new Lemming(width / random(1.5, 2.5), lemmingY, color(0, 0, 255), 20),
+    );
     lastLemmingTime = millis();
   }
   let speedMultiplier = 1.6 - timeLeft * 0.01;
