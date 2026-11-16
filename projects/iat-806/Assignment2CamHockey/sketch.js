@@ -21,7 +21,9 @@ async function setup() {
   video.size(640, 480);
   video.hide();
 
-  lemmings.push(new Lemming(width / 2, height - 10, color(0, 0, 255), 20));
+  lemmings.push(
+    new Lemming(width / random(1.5, 2.5), height - 10, color(0, 0, 255), 20),
+  );
   goal = new Goal(width - 50, height / 2 - 25, 50, color(255, 255, 0));
   leftGoal = new Goal(0, height / 2 - 25, 50, color(255, 0, 0));
 
@@ -135,10 +137,10 @@ function draw() {
       lemming.show();
     }
 
-    fill(255);
+    fill(1);
     textSize(32);
     textAlign(CENTER);
-    text("Time's up!", width / 2, height / 2);
+    text("Game Over", width / 2, height / 2);
   }
 
   textSize(20);
