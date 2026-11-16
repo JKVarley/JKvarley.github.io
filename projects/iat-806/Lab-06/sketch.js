@@ -3,16 +3,12 @@ let balls = [];
 // numBalls is written in camelCase.
 // you could also write in camel_case
 // this is the number of balls that you want to create.
-let numBalls = 2500;
+let numBalls = 500;
 // no color variables, no position variables, they are all defined within the class.
 
-let bodySegmentation;
+let handPose;
 let video;
-let segmentation;
-
-let options = {
-  maskType: "person",
-};
+let hands = [];
 
 async function setup() {
   createCanvas(640, 480);
@@ -20,23 +16,36 @@ async function setup() {
     balls.push(createRandomBall());
   }
 
-  bodySegmentation = await ml5.bodySegmentation("SelfieSegmentation", options);
-
   // Create the video
   video = createCapture(VIDEO);
   video.size(640, 480);
   video.hide();
 
-  bodySegmentation.detectStart(video, gotResults);
+  handPose = await ml5.handPose();
+  handPose.detectStart(video, gotHands);
 }
 
 function draw() {
   background(120);
 
-  for (let ball of balls) {
-    let onBody = segmentation && ball.isOnBody(segmentation.mask);
+  push();
+  translate(width, 0);
+  scale(-1, 1);
+  image(video, 0, 0, width, height);
+  pop();
 
-    let active = ball.contains(mouseX, mouseY) || onBody;
+  for (let ball of balls) {
+    let onHand = false;
+    for (let hand of hands) {
+      for (let keypoint of hand.keypoints) {
+        let handX = width - keypoint.x;
+        if (ball.contains(handX, keypoint.y)) {
+          onHand = true;
+        }
+      }
+    }
+
+    let active = ball.contains(mouseX, mouseY) || onHand;
 
     ball.respond(active);
 
@@ -67,6 +76,6 @@ function createRandomBall() {
   return new Ball(ballX, ballY, ballC, ballR);
 }
 
-function gotResults(result) {
-  segmentation = result;
+function gotHands(results) {
+  hands = results;
 }

@@ -19,12 +19,6 @@ class Ball {
     this.show();
   }
 
-isOnBody(mask) {
-    let pixel = mask.get(floor(this.x), floor(this.y)); // [r,g,b,a];
-
-    return pixel[3] < 128;
-  }
-
   contains(externalX, externalY) {
     let distance = dist(this.x, this.y, externalX, externalY);
     if (distance < this.r) {
