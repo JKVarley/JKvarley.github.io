@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Songgrounds — A Nova Scotia Music Atlas</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="back-link" href="../index.html">&larr; IAT 806</a>
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">♫</span>
+          <div>
+            <p>A music atlas · Nova Scotia</p>
+            <h1>Songgrounds</h1>
+            <span class="brand-note">Stories carried by the coast, one song at a time</span>
+          </div>
+        </div>
+        <button id="tag-button" class="primary-button" type="button">
+          <span aria-hidden="true">✳</span> Add a song place
+        </button>
+      </header>
+
+      <main class="workspace">
+        <section class="map-panel" aria-label="Interactive music map">
+          <div class="map-toolbar">
+            <label class="search-box">
+              <span aria-hidden="true">⌕</span>
+              <input id="place-search" type="search" placeholder="Find a place, song, or story" autocomplete="off" />
+            </label>
+          </div>
+          <div id="map" class="map" aria-label="Map of Nova Scotia"></div>
+          <div id="tagging-banner" class="tagging-banner" hidden>
+            Choose a place on the map to pin its song story
+          </div>
+          <div id="map-status" class="map-status">Illustrated map</div>
+        </section>
+
+        <aside class="detail-panel" aria-label="Song place details">
+          <div id="empty-state" class="empty-state">
+            <div class="empty-icon">♫</div>
+            <h2>Every song has a place.</h2>
+            <p>Follow the notes across Nova Scotia, or add a memory of your own.</p>
+          </div>
+
+          <article id="place-card" class="place-card" hidden>
+            <div class="place-card-heading">
+              <div>
+                <p id="place-region" class="eyebrow"></p>
+                <h2 id="place-name"></h2>
+              </div>
+              <button id="close-card" class="icon-button" type="button" aria-label="Close details">×</button>
+            </div>
+            <p id="place-story" class="story"></p>
+
+            <div id="player-wrap" class="player-wrap" hidden>
+              <div id="youtube-player"></div>
+            </div>
+
+            <div class="song-meta">
+              <p class="eyebrow">A song from this place</p>
+              <p id="song-title"></p>
+              <p id="song-artist" class="muted"></p>
+              <a id="song-link" class="text-link" href="#" target="_blank" rel="noopener" hidden>
+                Open in YouTube Music ↗
+              </a>
+            </div>
+
+            <button id="play-button" class="primary-button wide" type="button">▶ Play song</button>
+          </article>
+        </aside>
+      </main>
+    </div>
+
+    <dialog id="tag-dialog">
+      <form id="tag-form" method="dialog">
+        <div class="dialog-heading">
+          <div>
+            <p class="eyebrow">New song place</p>
+            <h2>Tag a location</h2>
+          </div>
+          <button id="close-tag-dialog" class="icon-button" type="button" aria-label="Close">×</button>
+        </div>
+
+        <input id="tag-lat" type="hidden" />
+        <input id="tag-lng" type="hidden" />
+
+        <label>
+          Place name
+          <input id="tag-place" name="place" required placeholder="Example: Inverness Beach" />
+        </label>
+        <label>
+          Region
+          <input id="tag-region" name="region" required placeholder="Example: Cape Breton" />
+        </label>
+        <div class="form-row">
+          <label>
+            Song title
+            <input id="tag-song" name="song" required placeholder="Song title" />
+          </label>
+          <label>
+            Artist
+            <input id="tag-artist" name="artist" required placeholder="Artist" />
+          </label>
+        </div>
+        <label>
+          YouTube Music or YouTube link
+          <input id="tag-url" name="url" type="url" placeholder="https://music.youtube.com/watch?v=..." />
+        </label>
+        <label>
+          Why is this song connected to the place?
+          <textarea id="tag-story" name="story" required rows="4" placeholder="Share the story behind this connection..."></textarea>
+        </label>
+        <button class="primary-button wide" type="submit">Add to the sound map</button>
+      </form>
+    </dialog>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
