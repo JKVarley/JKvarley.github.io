@@ -29,50 +29,40 @@
 
       <main class="workspace">
         <section class="map-panel" aria-label="Interactive music map">
-          <div class="map-toolbar">
-            <label class="search-box">
-              <span aria-hidden="true">⌕</span>
-              <input id="place-search" type="search" placeholder="Find a place, song, or story" autocomplete="off" />
-            </label>
-          </div>
+          <form id="place-search-form" class="map-search">
+            <input id="place-search" type="search" required placeholder="Search a place in Nova Scotia" />
+            <button id="search-button" class="primary-button" type="submit">Find</button>
+          </form>
           <div id="map" class="map" aria-label="Map of Nova Scotia"></div>
           <div id="tagging-banner" class="tagging-banner" hidden>
-            Choose a place on the map to pin its song story
+            Click the map to add your song
           </div>
-          <div id="map-status" class="map-status">Illustrated map</div>
+          <div id="map-status" class="map-status">Your songs, your map</div>
         </section>
 
         <aside class="detail-panel" aria-label="Song place details">
           <div id="empty-state" class="empty-state">
             <div class="empty-icon">♫</div>
             <h2>Every song has a place.</h2>
-            <p>Follow the notes across Nova Scotia, or add a memory of your own.</p>
+            <p>Add a song and story to begin building your own music map.</p>
           </div>
 
           <article id="place-card" class="place-card" hidden>
             <div class="place-card-heading">
               <div>
-                <p id="place-region" class="eyebrow"></p>
+                <p class="eyebrow">A song from this place</p>
                 <h2 id="place-name"></h2>
               </div>
               <button id="close-card" class="icon-button" type="button" aria-label="Close details">×</button>
             </div>
             <p id="place-story" class="story"></p>
 
-            <div id="player-wrap" class="player-wrap" hidden>
-              <div id="youtube-player"></div>
-            </div>
-
             <div class="song-meta">
-              <p class="eyebrow">A song from this place</p>
               <p id="song-title"></p>
-              <p id="song-artist" class="muted"></p>
               <a id="song-link" class="text-link" href="#" target="_blank" rel="noopener" hidden>
-                Open in YouTube Music ↗
+                Open song in YouTube Music ↗
               </a>
             </div>
-
-            <button id="play-button" class="primary-button wide" type="button">▶ Play song</button>
           </article>
         </aside>
       </main>
@@ -88,36 +78,23 @@
           <button id="close-tag-dialog" class="icon-button" type="button" aria-label="Close">×</button>
         </div>
 
-        <input id="tag-lat" type="hidden" />
-        <input id="tag-lng" type="hidden" />
-
         <label>
           Place name
-          <input id="tag-place" name="place" required placeholder="Example: Inverness Beach" />
+          <input id="tag-place" name="place" required placeholder="Example: Mira River" />
         </label>
         <label>
-          Region
-          <input id="tag-region" name="region" required placeholder="Example: Cape Breton" />
+          Song title
+          <input id="tag-song" name="song" required placeholder="Song title" />
         </label>
-        <div class="form-row">
-          <label>
-            Song title
-            <input id="tag-song" name="song" required placeholder="Song title" />
-          </label>
-          <label>
-            Artist
-            <input id="tag-artist" name="artist" required placeholder="Artist" />
-          </label>
-        </div>
         <label>
-          YouTube Music or YouTube link
+          YouTube Music link (optional)
           <input id="tag-url" name="url" type="url" placeholder="https://music.youtube.com/watch?v=..." />
         </label>
         <label>
-          Why is this song connected to the place?
-          <textarea id="tag-story" name="story" required rows="4" placeholder="Share the story behind this connection..."></textarea>
+          Story
+          <textarea id="tag-story" name="story" required rows="4" placeholder="What is the song about? How is it connected to this place?"></textarea>
         </label>
-        <button class="primary-button wide" type="submit">Add to the sound map</button>
+        <button class="primary-button wide" type="submit">Add to my map</button>
       </form>
     </dialog>
 

@@ -147,55 +147,36 @@ button { cursor: pointer; }
   background: #dce8df;
 }
 .leaflet-tile { filter: sepia(.17) saturate(.82) contrast(.96); }
-.map-fallback {
-  background: #dce9dc url("Nova Scotia.png") center / cover no-repeat;
-  cursor: crosshair;
-}
-.map-fallback::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(22,61,68,.05), rgba(255,255,255,.08));
-  pointer-events: none;
-}
 
-.map-toolbar {
+.map-search {
   position: absolute;
   top: 16px;
-  left: 16px;
-  z-index: 10;
+  right: 16px;
+  z-index: 1000;
   display: flex;
+  width: min(340px, calc(100% - 32px));
   gap: 8px;
 }
-.search-box {
-  width: 270px;
-  height: 46px;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 0 13px;
+.map-search input {
+  width: 250px;
+  min-width: 0;
+  flex: 1;
+  padding: 10px 12px;
   border: 1px solid #bcae8c;
   border-radius: 3px 9px 4px 8px;
   background: var(--paper-light);
-  box-shadow: 2px 3px 0 rgba(56,58,43,.18);
-}
-.search-box span { color: var(--rust); font-size: 25px; line-height: 1; }
-.search-box input {
-  width: 100%;
-  border: 0;
-  outline: 0;
-  background: transparent;
   color: var(--ink);
   font-family: Georgia, serif;
   font-size: 14px;
+  box-shadow: 2px 3px 0 rgba(56,58,43,.18);
 }
-.search-box input::placeholder { color: #817a65; font-style: italic; }
+.map-search button:disabled { cursor: wait; opacity: .7; }
 
 .map-status {
   position: absolute;
   left: 14px;
   bottom: 14px;
-  z-index: 10;
+  z-index: 1000;
   padding: 6px 10px;
   border: 1px dashed #9a8b6b;
   background: rgba(248,241,222,.92);
@@ -208,7 +189,7 @@ button { cursor: pointer; }
   top: 76px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 15;
+  z-index: 1000;
   max-width: calc(100% - 24px);
   padding: 10px 17px;
   border: 1px solid var(--ochre);
@@ -236,13 +217,8 @@ button { cursor: pointer; }
   box-shadow: 2px 3px 0 rgba(43,41,31,.35);
   rotate: -45deg;
 }
-.map-fallback .note-marker {
-  position: absolute;
-  z-index: 5;
-  transform: translate(-50%, -50%);
-}
 .note-marker span { display: block; rotate: 45deg; line-height: 32px; }
-.note-marker:hover, .note-marker.selected {
+.note-marker:hover {
   border-color: #fff8df;
   background: var(--ochre);
   color: var(--forest-deep);
@@ -340,16 +316,6 @@ button { cursor: pointer; }
   font-style: italic;
   line-height: 1.75;
 }
-.player-wrap {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  margin: 18px 0;
-  overflow: hidden;
-  border: 3px double #9c8b68;
-  border-radius: 2px;
-  background: var(--forest-deep);
-}
-.player-wrap iframe { width: 100%; height: 100%; border: 0; }
 .song-meta {
   margin: 21px 0 18px;
   padding: 14px 0;
@@ -364,17 +330,14 @@ button { cursor: pointer; }
   font-size: 21px;
   font-weight: 700;
 }
-.muted { margin-top: 3px !important; color: var(--muted); font-size: 14px; font-style: italic; }
 .text-link {
   display: inline-block;
   margin-top: 9px;
   color: var(--rust-dark);
   font-size: 13px;
   font-style: italic;
-  text-decoration-thickness: 1px;
   text-underline-offset: 3px;
 }
-
 dialog {
   width: min(520px, calc(100vw - 30px));
   padding: 0;
@@ -411,8 +374,6 @@ dialog input:focus, dialog textarea:focus {
   border-color: var(--moss);
   box-shadow: 0 0 0 3px rgba(102,116,90,.16);
 }
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
 @media (max-width: 820px) {
   body { overflow: auto; }
   .app-shell { height: auto; min-height: 100vh; grid-template-rows: 90px auto; }
@@ -424,8 +385,6 @@ dialog input:focus, dialog textarea:focus {
   .workspace { grid-template-columns: 1fr; grid-template-rows: 58vh auto; }
   .map-panel { margin: 10px; }
   .detail-panel { min-height: 38vh; border-top: 6px double #b7a982; border-left: 0; }
-  .map-toolbar { left: 12px; top: 12px; }
-  .search-box { width: 250px; }
 }
 
 @media (max-width: 520px) {
@@ -438,7 +397,5 @@ dialog input:focus, dialog textarea:focus {
   .brand h1 { font-size: 20px; }
   .topbar > .primary-button { max-width: 138px; min-height: 40px; padding: 7px 9px; font-size: 11px; }
   .workspace { grid-template-rows: 54vh auto; }
-  .search-box { width: min(230px, calc(100vw - 70px)); }
   .detail-panel { padding: 25px 22px; }
-  .form-row { grid-template-columns: 1fr; }
 }
